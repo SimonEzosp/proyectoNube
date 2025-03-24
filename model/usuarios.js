@@ -1,14 +1,20 @@
 const mongoose = require('mongoose');
 
 const registerSchema = new mongoose.Schema({
-    nombre:{ type:String, required: true},
-    segundoNombre:{ type:String, required: true},
-    primerApellido:{ type:String, required: true},
-    segundoApellido:{ type:String, required: true},
-    correo:{ type:String, required: true, unique:true},
-    contrasena:{ type:String, required: true},
-    fechaNacimiento:{ type:String,required:true},
-    numeroCelular:{type:Number,required:true}
-})
+    pNombre:         { type: String, required: true, maxlength: 30 },
+    sNombre:         { type: String, required: true, maxlength: 30 },
+    pApellido:       { type: String, required: true, maxlength: 30 },
+    sApellido:       { type: String, required: true, maxlength: 30 },
+    nDocumento:      { type: Number, required: true, unique: true, max: 999999999999 },
+    fNacimiento:     { type: String, required: true, maxlength: 10 },
+    email:           { type: String, required: true, maxlength: 30, unique: true },
+    direccion:       { type: String, required: true, maxlength: 30 },
+    contrasenia:     { type: String, required: true },
+    ntelefonico:     { type: Number, required: true },
+    urlFoto:         { type: String },
+    nombreContainer: { type: String, maxlength: 30 },
+    nombreDirectorio:{ type: String, maxlength: 100 },
+    tokenAccess:     { type: String }
+});
 
-module.exports = mongoose.model('Usuario',registerSchema);
+module.exports = mongoose.model('Usuario', registerSchema);

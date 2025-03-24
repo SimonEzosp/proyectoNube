@@ -6,7 +6,6 @@ const cors = require('cors');
 //crear el servidor 
 const app = express();
 
-
 //conexión DB
 mongoose.connect(process.env.DB_CONNECT)
 const db = mongoose.connection
@@ -14,7 +13,8 @@ db.on('error',(error)=>console.error(error))
 db.once('open',()=>console.log('Connected to Db'))
 
 //lectura y pasero del body
-app.use(express.json())
+app.use(express.json({limit:'500mb'}))
+app.use(express.urlencoded({extended: true, limit:'500mb'}));
 
 //rutas
 app.use(cors());

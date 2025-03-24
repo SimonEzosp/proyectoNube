@@ -2,14 +2,20 @@ POST http://localhost:4000/User/SignUp
 Content-Type: application/json
 
 {
-    "nombre":"Simon",
-    "segundoNombre":"David",
-    "primerApellido":"Rodriguez",
-    "segundoApellido":"Ospina",
-    "correo":"simondavidrodriguez5870@gmail.com",
-    "contrasena":"1013036309simon",
-    "fechaNacimiento":"5 mayo 2008",
-    "numeroCelular":3223415969
+        "pNombre": "Johan",
+        "sNombre": "Felipe",
+        "pApellido": "Ramirez",
+        "sApellido": "Beltran",
+        "nDocumento": 1055452863,
+        "fNacimiento": { "$date": "2005-09-27" },
+        "email": "johan@example.com",
+        "direccion": "Calle Ficticia 123",
+        "contrasenia": "aklsjiwj@we12",
+        "ntelefonico": 32100546545,
+        "urlFoto": "https://storagalmacenamiento.blob.core.windows.net/imagescontainer/perfiles/perfil/prueba.jpeg?sp=r&st=2025-03-23T20:26:23Z&se=2025-03-24T04:26:23Z&spr=https&sv=2024-11-04&sr=b&sig=cR%2BRynPu8aEj%2FaGvgpO3M7hlKlzSti2%2FtwOii0OL3i0%3D",
+        "nombreContainer": "imagescontainer",
+        "nombreDirectorio": "perfiles/perfil/prueba.jpeg",
+        "tokenAccess": "sp=r&st=2025-03-23T20:34:23Z&se=2025-03-24T04:34:23Z&spr=https&sv=2024-11-04&sr=b&sig=Ses2lLyxCJ9UMPQhePEd%2Fl7RKp326hA9ofwfnNxXNik%3D"
 }
 
 ### Obtener usuario

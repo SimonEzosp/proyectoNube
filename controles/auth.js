@@ -1,112 +1,95 @@
-const {response} = require("express");
-const Usuario = require("../model/usuarios")
+const { response } = require("express");
+const Usuario = require("../model/usuarios");
 
-const crearUsuario = async (req,res)=>{
-    const {correo} = req.body;
+// Crear usuario
+const crearUsuario = async (req, res = response) => {
+    const { email } = req.body;
+
     try {
-        let register = await Usuario.findOne({correo : correo});
-        if(register){
-            console.log("Ya existe un usuario con este correo","\n")
-            return res.status(400).json({message: "ya existe un usuario con ese correo"})
+        const existe = await Usuario.findOne({ email });
+        if (existe) {
+            console.log("❌ Ya existe un usuario con este correo\n");
+            return res.status(400).json({ message: "Ya existe un usuario con ese correo" });
         }
-        console.log("usuario creado");
-        let usuario = new Usuario(req.body);
-        await usuario.save();
-        return res.status(200).json({message: "usuario creado"});
+
+        const nuevoUsuario = new Usuario(req.body);
+        await nuevoUsuario.save();
+
+        console.log("✅ Usuario creado correctamente\n");
+        return res.status(201).json({ message: "Usuario creado" });
 
     } catch (err) {
-        console.log(err)
-        res.status(400).json({status: err.message})
+        console.error("❌ Error al crear usuario:", err.message);
+        return res.status(500).json({ message: err.message });
     }
-}
+};
 
-//tomar solo un usuario
-
-const traerUnSoloUsuario =(req, res)=>{
-    console.log(res.usuario,"\n")
-    res.json(res.usuario)
-}
-
-//obtener usuarios
-const obtenerUsuarios =async (req, res)=>{
+// Obtener todos los usuarios
+const obtenerUsuarios = async (req, res = response) => {
     try {
-        const registers = await Usuario.find();
-        console.log(registers,"\n");
-        res.json(registers);
+        const usuarios = await Usuario.find();
+        console.log("📋 Lista de usuarios obtenida\n");
+        res.json(usuarios);
     } catch (err) {
-        console.log(err)
-        res.status(500).json({status: err.message})
-        
+        console.error("❌ Error al obtener usuarios:", err.message);
+        res.status(500).json({ message: err.message });
     }
-}
+};
 
-//actualizar usuario
-const actualizarUsuario = async(req, res)=>{
-    // if(req.nombre != null){
-    //     res.usuario.nombre= req.body.name;
-    // }
-    // if(req.segundoNombre != null){
-    //     res.usuario.segundoNombre= req.body.segundoNombre;
-    // }
-    // if(req.primerApellido != null){
-    //     res.usuario.primerApellido= req.body.primerApellido;
-    // }
-    // if(req.segundoApellido != null){
-    //     res.usuario.segundoApellido= req.body.segundoApellido;
-    // }
-    // if(req.correo != null){
-    //     res.usuario.correo= req.body.correo;
-    // }
-    // if(req.contrasena != null){
-    //     res.usuario.contrasena= req.body.contrasena;
-    // }
-    // if(req.fechaNacimiento != null){
-    //     res.usuario.fechaNacimiento= req.body.fechaNacimiento;
-    // }
-    // if(req.numeroCelular != null){
-    //     res.usuario.numeroCelular= req.body.numeroCelular;
-    // }
+// Obtener un solo usuario
+const traerUnSoloUsuario = (req, res = response) => {
+    console.log("👤 Usuario obtenido:", res.usuario, "\n");
+    res.json(res.usuario);
+};
+
+// Actualizar usuario
+const actualizarUsuario = async (req, res = response) => {
     try {
-        const register = await Usuario.findByIdAndUpdate(req.params.id, req.body);
-        res.status(200).json({ message: "Usuario actualizado",register})
-    } catch (err) {
-        res.status(400).json({ message: err.message })
-    }
-}
-
-//eliminar usuario
-const elimiarUsuario = async (req, res)=>{
-    const registerId = req.params.id
-    let register
-    try {
-        register = await Usuario.findByIdAndDelete(registerId)
-        res.json({message: 'usuario eliminado', register})
-    } catch (err) {
-        res.status(500).json({message: err.message})
-    }
-}
-
-async function getRegister(req, res, next){
-    const registerId = req.params.id
-    let register = await Usuario.findById(registerId);
-    try{
-        if(!register){
-            return res.status(404).json({message: ' cannot find user'})
-        }else{
-            res.usuario = register;
-            next();
+        const actualizado = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!actualizado) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
         }
-    }catch(err){
-        return res.status(500).json({message: err.message})
+        res.status(200).json({ message: "Usuario actualizado", usuario: actualizado });
+    } catch (err) {
+        console.error("❌ Error al actualizar usuario:", err.message);
+        res.status(400).json({ message: err.message });
     }
-    
-}
+};
 
-module.exports={
+// Eliminar usuario
+const elimiarUsuario = async (req, res = response) => {
+    try {
+        const eliminado = await Usuario.findByIdAndDelete(req.params.id);
+        if (!eliminado) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+        res.json({ message: "Usuario eliminado", usuario: eliminado });
+    } catch (err) {
+        console.error("❌ Error al eliminar usuario:", err.message);
+        res.status(500).json({ message: err.message });
+    }
+};
+
+// Middleware: obtener un usuario por ID
+const getRegister = async (req, res, next) => {
+    try {
+        const usuario = await Usuario.findById(req.params.id);
+        if (!usuario) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+        res.usuario = usuario;
+        next();
+    } catch (err) {
+        console.error("❌ Error en middleware getRegister:", err.message);
+        return res.status(500).json({ message: err.message });
+    }
+};
+
+module.exports = {
     crearUsuario,
+    obtenerUsuarios,
+    traerUnSoloUsuario,
     actualizarUsuario,
     elimiarUsuario,
-    traerUnSoloUsuario,
-    obtenerUsuarios,
     getRegister
-}
+};
