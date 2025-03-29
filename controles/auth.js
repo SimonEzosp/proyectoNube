@@ -24,6 +24,47 @@ const crearUsuario = async (req, res = response) => {
     }
 };
 
+//login 
+
+const loginUsuario = async (req,res = response)=>{
+    const {email, contrasenia} = req.body;
+    try {
+        let register = await Usuario.findOne({ email });
+        if(!register){
+            console.log("error en el cooreo","\n")
+            return res.status(400).json({ message: "error en Contraseña/Correo" })
+        }
+        
+        if(register.contrasenia !== contrasenia){
+            console.log("error en la contraseña","\n")
+            return res.status(400).json({message: "error en Contraseña/Correo"})
+        }
+        res.status(201).json({
+            login: register,
+            contrasenia
+        })
+
+        console.log("login: ",register,"\n")
+    } catch (err) {
+        res.status(400).json({ message: err.message })
+        console.log(err,"\n")
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Obtener todos los usuarios
 const obtenerUsuarios = async (req, res = response) => {
     try {
@@ -87,6 +128,7 @@ const getRegister = async (req, res, next) => {
 
 module.exports = {
     crearUsuario,
+    loginUsuario,
     obtenerUsuarios,
     traerUnSoloUsuario,
     actualizarUsuario,
