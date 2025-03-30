@@ -7,12 +7,7 @@ const cors = require('cors');
 const app = express();
 
 //conexión DB
-mongoose.connect(process.env.DB_CONNECT, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    ssl: true,
-    tlsAllowInvalidCertificates: true,
-})
+mongoose.connect(process.env.DB_CONNECT)
 const db = mongoose.connection
 db.on('error',(error)=>console.error('❌ Error connecting to MongoDB:',error))
 db.once('open',()=>console.log('✅ Connected to Db'))
