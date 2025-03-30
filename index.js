@@ -14,7 +14,7 @@ mongoose.connect(process.env.DB_CONNECT, {
     tlsAllowInvalidCertificates: true,
 })
 const db = mongoose.connection
-db.on('error',(error)=>console.error(error))
+db.on('error',(error)=>console.error('❌ Error connecting to MongoDB:',error))
 db.once('open',()=>console.log('✅ Connected to Db'))
 
 //lectura y pasero del body
