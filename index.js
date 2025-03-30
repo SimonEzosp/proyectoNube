@@ -7,10 +7,15 @@ const cors = require('cors');
 const app = express();
 
 //conexión DB
-mongoose.connect(process.env.DB_CONNECT)
+mongoose.connect(process.env.DB_CONNECT, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    ssl: true,
+    tlsAllowInvalidCertificates: true,
+})
 const db = mongoose.connection
 db.on('error',(error)=>console.error(error))
-db.once('open',()=>console.log('Connected to Db'))
+db.once('open',()=>console.log('✅ Connected to Db'))
 
 //lectura y pasero del body
 app.use(express.json({limit:'500mb'}))
