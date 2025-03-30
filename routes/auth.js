@@ -1,10 +1,12 @@
 const {Router} = require("express");
 const router = Router();
-const {crearUsuario, traerUnSoloUsuario, actualizarUsuario,getRegister,elimiarUsuario,obtenerUsuarios,} = require("../controles/auth")
+const {crearUsuario,loginUsuario, traerUnSoloUsuario, actualizarUsuario,getRegister,elimiarUsuario,obtenerUsuarios,} = require("../controles/auth")
 
 
 // crear usuario
 router.post('/SignUp', crearUsuario );
+// crear usuario
+router.post('/SignIn', loginUsuario );
 //traer usuario
 router.get('/SignUp/Usuario/:id',getRegister,traerUnSoloUsuario );
 //traer usuarios
