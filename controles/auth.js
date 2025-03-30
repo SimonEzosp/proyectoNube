@@ -1,9 +1,9 @@
 const { response } = require("express");
 const Usuario = require("../model/usuarios");
-
+const {generarJWT} = require('../helper/jwt')
 // Crear usuario
 const crearUsuario = async (req, res = response) => {
-    const { email } = req.body;
+    const { email, name } = req.body;
 
     try {
         const existe = await Usuario.findOne({ email });
@@ -11,12 +11,15 @@ const crearUsuario = async (req, res = response) => {
             console.log("❌ Ya existe un usuario con este correo\n");
             return res.status(400).json({ message: "Ya existe un usuario con ese correo" });
         }
-
         const nuevoUsuario = new Usuario(req.body);
         await nuevoUsuario.save();
 
-        console.log("✅ Usuario creado correctamente\n");
-        return res.status(201).json({ message: "Usuario creado" });
+        const token = await generarJWT( nuevoUsuario._id, nuevoUsuario.name);   
+        console.log("✅ Usuario creado correctamente\n",nuevoUsuario, "\n", "token ",token);
+        return res.status(201).json({ message: "Usuario creado",
+            user:  nuevoUsuario,
+            token
+         });
 
     } catch (err) {
         console.error("❌ Error al crear usuario:", err.message);
@@ -39,31 +42,19 @@ const loginUsuario = async (req,res = response)=>{
             console.log("error en la contraseña","\n")
             return res.status(400).json({message: "error en Contraseña/Correo"})
         }
+        const token = await generarJWT( Usuario._id, Usuario.name);
         res.status(201).json({
             login: register,
+            token: token,
             contrasenia
         })
 
-        console.log("login: ",register,"\n")
+        console.log("login: ",register,"token: ",token,"\n")
     } catch (err) {
         res.status(400).json({ message: err.message })
         console.log(err,"\n")
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Obtener todos los usuarios
 const obtenerUsuarios = async (req, res = response) => {

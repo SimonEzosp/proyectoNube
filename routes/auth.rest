@@ -26,7 +26,7 @@ Content-Type: application/json
 
 {
     "email":"simonrodriguezospina5870@gmail.com",
-    "contrasenia":"asas"
+    "contrasenia":"simon12345"
 }
 
 ### Obtener usuario
@@ -40,7 +40,7 @@ Content-Type: application/json
 
 
 ### Actualizar usuario
-PUT http://localhost:4000/User/SignUp/Actualizar/67dd132f40f1f8598343b5bf
+PUT http://localhost:4000/User/SignUp/Actualizar/
 Content-Type: application/json
 
 {
@@ -48,7 +48,7 @@ Content-Type: application/json
 }
 
 ### eliminar usuario
-DELETE http://localhost:4000/User/SignUp/Eliminar/67dd130440f1f8598343b5b6
+DELETE http://localhost:4000/User/SignUp/Eliminar/67e8b850c8178ddb37feaf50
 Content-Type: application/json
 
 ### obtetner todos los usuarios
